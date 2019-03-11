@@ -1,0 +1,52 @@
+body {
+    width: 1200px;
+    margin: 20px auto;
+
+    background: #444444;
+}
+
+a,
+h1,
+p {
+    color: white;
+}
+
+div.resList,
+div.foodList,
+form,
+h1,
+div.messageBox {
+    margin: 0 auto;
+    width: 500px;
+
+}
+
+h1.mainTitle {
+    width: 850px;
+    padding-left: 350px;
+    border-bottom: 1px solid white;
+}
+
+div.messageBox {
+    padding: 0 10px;
+    border: 1px solid white;
+    border-radius: 2px;
+}
+
+div.foodList {
+    text-align: center;
+    border-bottom: 1px solid white;
+    padding-bottom: 10px;
+}
+
+div.resList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+p.addRes,
+p.addFood {
+    width: 500px;
+    margin: 50px auto 0;
+}
