@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import \
+    Flask, render_template, request, redirect, url_for, flash, jsonify
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -10,6 +11,7 @@ engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
+
 @app.route('/res/<int:id>/JSON')
 def resJSON(id):
     session = DBSession()
@@ -17,11 +19,13 @@ def resJSON(id):
     menu = session.query(MenuItem).filter_by(restaurant_id=res.id)
     return jsonify(MenuItems=[i.serialize for i in menu])
 
+
 @app.route('/res/menu/<int:menu_id>/JSON')
 def resMenuJSON(menu_id):
     session = DBSession()
     menu = session.query(MenuItem).filter_by(id=menu_id).one()
     return jsonify(MenuItem=menu.serialize)
+
 
 @app.route('/')
 @app.route('/res/')
@@ -30,10 +34,10 @@ def all():
     res = session.query(Restaurant).all()
     return render_template('res.html', res=res)
 
+
 @app.route('/res/newRes/', methods=['GET', 'POST'])
 def addRes():
     session = DBSession()
-    
     if request.method == 'GET':
         return render_template('newRes.html')
     if request.method == 'POST':
@@ -42,7 +46,8 @@ def addRes():
         session.commit()
         flash('Add new restaurant success!')
         return redirect(url_for('all'))
-    
+
+
 @app.route('/res/editRes/<int:id>', methods=['GET', 'POST'])
 def editRes(id):
     session = DBSession()
@@ -55,7 +60,8 @@ def editRes(id):
         session.commit()
         flash('edit res success')
         return redirect(url_for('all'))
-    
+
+
 @app.route('/res/deleteRes/<int:id>', methods=['GET', 'POST'])
 def deleteRes(id):
     session = DBSession()
@@ -69,32 +75,32 @@ def deleteRes(id):
         flash('delete res success')
         return redirect(url_for('all'))
 
+
 @app.route('/res/<int:id>/')
 def restaurantMenu(id):
     session = DBSession()
-    
     res = session.query(Restaurant).filter_by(id=id).one()
     menu = session.query(MenuItem).filter_by(restaurant_id=res.id)
     return render_template('menu.html', res=res, menu=menu)
 
+
 @app.route('/res/new/<int:res_id>/', methods=['GET', 'POST'])
 def add(res_id):
     session = DBSession()
-    
     if request.method == 'GET':
         res = session.query(Restaurant).filter_by(id=res_id).one()
         return render_template('new.html', res=res)
     if request.method == 'POST':
-        newM = MenuItem(name=request.form['name'],restaurant_id=res_id)
+        newM = MenuItem(name=request.form['name'], restaurant_id=res_id)
         session.add(newM)
         session.commit()
         flash('new menu item success')
         return redirect(url_for('restaurantMenu', id=res_id))
 
+
 @app.route('/res/edit/<int:res_id>/<int:menu_id>', methods=['GET', 'POST'])
 def edit(res_id, menu_id):
     session = DBSession()
-    
     if request.method == 'GET':
         res = session.query(Restaurant).filter_by(id=res_id).one()
         menu = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -105,12 +111,11 @@ def edit(res_id, menu_id):
         session.commit()
         flash('edit menu item success')
         return redirect(url_for('restaurantMenu', id=res_id))
-        
+
 
 @app.route('/res/delete/<int:res_id>/<int:menu_id>', methods=['GET', 'POST'])
 def delete(res_id, menu_id):
     session = DBSession()
-    
     if request.method == 'GET':
         res = session.query(Restaurant).filter_by(id=res_id).one()
         menu = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -121,6 +126,7 @@ def delete(res_id, menu_id):
         session.commit()
         flash('delete menu item success')
         return redirect(url_for('restaurantMenu', id=res_id))
+
 
 if __name__ == '__main__':
     app.secret_key = 'secure key'
