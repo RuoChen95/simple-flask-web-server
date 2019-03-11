@@ -45,14 +45,14 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   The web server contains three features:
 
   1. The CRUD of restaurant table
-  2. The CRUD of menue table
-  3. Return menue info using JSON
+  2. The CRUD of menu table
+  3. Return menu info using JSON
 
   run it using 
   ```
     python webserverUsingFlask.py
   ```
 
-### Application code style
+## Application code style
 
   Passing the pycodestyle (`pycodestyle --first webserverUsingFlask.py`) checking.
