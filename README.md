@@ -1,5 +1,5 @@
 # simple-flask-web-server
-It's a simple web server, which has the function of creating, reading, updating and deleting data in restaurant and menu using flask and sqlAlchemy which is coded by Ruochen Xie.
+It's a simple web server coded by Ruochen Xie, which has the function of creating, reading, updating and deleting data in restaurant and menu using flask and sqlAlchemy.
 
 This is one of the projects from udacity full-stack nanodegree.
 
