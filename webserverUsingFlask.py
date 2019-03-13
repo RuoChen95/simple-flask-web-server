@@ -1,10 +1,22 @@
 from flask import \
     Flask, render_template, request, redirect, url_for, flash, jsonify
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from database_setup import Restaurant, Base, MenuItem
+
+from flask import session as login_session
+import random
+import string
+
+# IMPORTS FOR THIS STEP
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import json
+from flask import make_response
+import requests
+
+
 app = Flask(__name__)
 
 engine = create_engine('sqlite:///restaurantmenu.db')
@@ -25,6 +37,11 @@ def resMenuJSON(menu_id):
     session = DBSession()
     menu = session.query(MenuItem).filter_by(id=menu_id).one()
     return jsonify(MenuItem=menu.serialize)
+
+
+@app.route('/githubConnect', methods=['POST'])
+def githubConnet():
+    return
 
 
 @app.route('/')
