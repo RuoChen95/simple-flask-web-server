@@ -2,7 +2,6 @@
     <head>
         <title>Restaurant List</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
-        <script src="../static/jquery-3.3.1.min.js"> </script>
     </head>
     <body>
         <h1>Restaurant List</h1>
@@ -27,40 +26,5 @@
             {% endfor %}
         </div>
         <p class="addRes"><a href="{{url_for('addRes')}}">Add a new restaurant</a></p>
-        <p id="githubLogin"><a href="https://github.com/login/oauth/authorize?client_id=c8ab37b2d9abdacbfd01&scope=user,public_repo">Github Login</a></p>
     </body>
-    <script>
-        if (location.search) {
-            $.ajax({
-                type: 'POST',
-                url: 'https://github.com/login/oauth/access_token',
-                data: {
-                    client_id: 'c8ab37b2d9abdacbfd01',
-                    client_secret: '856e076d12c3f7693c29210c739396bd428e674f',
-                    code: location.search.split('=')[1]
-                },
-                success: function(result) {
-                    if (result) {
-                        let access_token = result.split('&')[0].split('=')[1];
-                        if(access_token !== 'bad_verification_code') {
-                            $('#githubLogin').hide();
-
-                            $.ajax({
-                                type: 'GET',
-                                url: 'https://api.github.com/user',
-                                data: {
-                                    access_token: access_token
-                                },
-                                success: function(result) {
-                                    console.log(result)
-                                    $('#githubLogin').show();
-                                    $('#githubLogin').text('User: ' + result.login);
-                                }
-                            })
-                        }
-                    }
-                }
-            })
-        }
-    </script>
 </html>

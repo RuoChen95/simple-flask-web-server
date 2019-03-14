@@ -5,10 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Restaurant, Base, MenuItem
 
 from flask import session as login_session
-import random
-import string
+import random, string
 
-# IMPORTS FOR THIS STEP
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -16,6 +14,7 @@ import json
 from flask import make_response
 import requests
 
+CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 
 app = Flask(__name__)
 
@@ -39,10 +38,36 @@ def resMenuJSON(menu_id):
     return jsonify(MenuItem=menu.serialize)
 
 
-@app.route('/githubConnect', methods=['POST'])
-def githubConnet():
-    return
+@app.route('/login', methods=['GET'])
+def login():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    
+    return render_template('login.html', STATE=state)
 
+
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+    if request.args.get('state') != login_session['state']:
+        response = make_response(json.dumps('Invalid state'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        code = request.data
+    
+        user_info = requests.get('https://api.github.com/user?access_token=%s' % code).json()
+        
+        login_session['username'] = user_info["login"]
+        login_session['picture'] = user_info["avatar_url"]
+        login_session['email'] = user_info["email"]
+        login_session['bio'] = user_info["bio"]
+
+        flash("You are now logged in as %s" % login_session['username'])
+        return 'OK'
+
+@app.route('gdisconnect')
+def gdisconnect():
+    return '..'
 
 @app.route('/')
 @app.route('/res/')
