@@ -7,9 +7,6 @@ from database_setup import Restaurant, Base, MenuItem
 from flask import session as login_session
 import random, string
 
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-import httplib2
 import json
 from flask import make_response
 import requests
@@ -88,10 +85,8 @@ def gdisconnect():
         del login_session['email']
         del login_session['bio']
 
-        response = make_response(json.dumps('Successfully disconnected'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        flash("You are now logged out")
-        return response
+        flash("You are now logout ")
+        return redirect(url_for('all'))
         
 
 @app.route('/')
@@ -99,7 +94,7 @@ def gdisconnect():
 def all():
     session = DBSession()
     res = session.query(Restaurant).all()
-    return render_template('res.html', res=res)
+    return render_template('res.html', res=res, login_session=login_session)
 
 
 @app.route('/res/newRes/', methods=['GET', 'POST'])
