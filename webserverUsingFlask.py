@@ -53,10 +53,12 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        code = request.data
+        access_token = request.data
+        print access_token
     
-        user_info = requests.get('https://api.github.com/user?access_token=%s' % code).json()
-        
+        user_info = requests.get('https://api.github.com/user?access_token=%s' % access_token).json()
+
+        login_session['access_token'] = access_token
         login_session['username'] = user_info["login"]
         login_session['picture'] = user_info["avatar_url"]
         login_session['email'] = user_info["email"]
@@ -65,9 +67,32 @@ def gconnect():
         flash("You are now logged in as %s" % login_session['username'])
         return 'OK'
 
-@app.route('gdisconnect')
+@app.route('/gdisconnect')
+@app.route('/logout')
 def gdisconnect():
-    return '..'
+    if login_session['access_token'] is None:
+        print 'Access Token is None'
+        response = make_response(json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        print 'In gdisconnect access token is %s', login_session['access_token']
+        print 'User name is: '
+        print login_session['username']
+        
+        # TODO: delete access_token in github
+        
+        del login_session['access_token']
+        del login_session['username']
+        del login_session['picture']
+        del login_session['email']
+        del login_session['bio']
+
+        response = make_response(json.dumps('Successfully disconnected'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        flash("You are now logged out")
+        return response
+        
 
 @app.route('/')
 @app.route('/res/')
@@ -80,6 +105,8 @@ def all():
 @app.route('/res/newRes/', methods=['GET', 'POST'])
 def addRes():
     session = DBSession()
+    if 'username' not in login_session:
+        return redirect('/login')
     if request.method == 'GET':
         return render_template('newRes.html')
     if request.method == 'POST':
