@@ -34,8 +34,11 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   3. Change directory to /vagrant and look around with ls.
   
 ### Setting up the database:
+
+  You can use the restaurantmenu.db directly or using the following command to creat a clean restaurantmenu.db:
+
   1. Create the database using the command:`python database_setup.py`
-  2. Use `python lotsofmenus.py` to populate the database
+  2. Use `python setmenus.py` to populate the database
   
   The database includes two tables:
   * The restaurant table includes the name and id.
