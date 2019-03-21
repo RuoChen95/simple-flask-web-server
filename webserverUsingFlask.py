@@ -22,6 +22,7 @@ DBSession = sessionmaker(bind=engine)
 
 
 @app.route('/res/<int:id>/JSON')
+@app.route('/res/<int:id>.JSON')
 def resJSON(id):
     session = DBSession()
     res = session.query(Restaurant).filter_by(id=id).one()
@@ -30,6 +31,7 @@ def resJSON(id):
 
 
 @app.route('/res/menu/<int:menu_id>/JSON')
+@app.route('/res/menu/<int:menu_id>.JSON')
 def resMenuJSON(menu_id):
     session = DBSession()
     menu = session.query(MenuItem).filter_by(id=menu_id).one()
@@ -98,7 +100,10 @@ def gdisconnect():
 def all():
     session = DBSession()
     res = session.query(Restaurant).all()
-    return render_template('res.html', res=res, login_session=login_session)
+    menu = session.query(MenuItem)
+    
+    print menu
+    return render_template('res.html', res=res, menu=menu, login_session=login_session)
 
 
 @app.route('/res/newRes/', methods=['GET', 'POST'])
@@ -149,7 +154,13 @@ def restaurantMenu(id):
     session = DBSession()
     res = session.query(Restaurant).filter_by(id=id).one()
     menu = session.query(MenuItem).filter_by(restaurant_id=res.id)
-    return render_template('menu.html', res=res, menu=menu)
+    return render_template('menu.html', res=res, menu=menu, login_session=login_session)
+
+@app.route('/item/<int:id>/')
+def item(id):
+    session = DBSession()
+    item = session.query(MenuItem).filter_by(id=id).one()
+    return render_template('item.html', item=item)
 
 
 @app.route('/res/new/<int:res_id>/', methods=['GET', 'POST'])
@@ -176,6 +187,7 @@ def edit(res_id, menu_id):
     if request.method == 'POST':
         menu = session.query(MenuItem).filter_by(id=menu_id).one()
         menu.name = request.form['name']
+        menu.description = request.form['description']
         session.commit()
         flash('edit menu item success')
         return redirect(url_for('restaurantMenu', id=res_id))

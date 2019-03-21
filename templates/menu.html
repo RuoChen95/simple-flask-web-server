@@ -1,10 +1,16 @@
 <html>
     <head>
         <title>{{res.name}}</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.less')}}">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js" ></script>
     </head>
     <body>
-        <h1 class="mainTitle">{{res.name}}</h1>
+        <h1 class="mainTitle">
+            {{res.name}}
+        </h1>
+        {% if login_session.get('username') %}
+            <a href="{{url_for('add', res_id=res.id)}}">Add food</a>
+        {% endif %}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                  <div class="messageBox">
@@ -19,10 +25,11 @@
             <p>{{i.name}}</p>
             <p>{{i.description}}</p>
             <p>{{i.price}}</p>
-            <a href="{{url_for('edit', res_id=res.id, menu_id=i.id)}}">edit</a>
-            <a href="{{url_for('delete', res_id=res.id, menu_id=i.id)}}">delete</a>
+            {% if login_session.get('username') %}
+                <a href="{{url_for('edit', res_id=res.id, menu_id=i.id)}}">edit</a>
+                <a href="{{url_for('delete', res_id=res.id, menu_id=i.id)}}">delete</a>
+            {% endif %}
         </div>
         {% endfor %}
-        <p class="addFood"><a href="{{url_for('add', res_id=res.id)}}">Add food</a></p>
     </body>
 </html>
