@@ -11,7 +11,8 @@ import json
 from flask import make_response
 import requests
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+client_id = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+client_secret = json.loads(open('client_secrets.json', 'r').read())['web']['client_secret']
 
 app = Flask(__name__)
 
@@ -50,9 +51,12 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        access_token = request.data
-        print access_token
-    
+        code = request.data
+        
+        url = 'https://github.com/login/oauth/access_token?client_id=' + client_id + '&client_secret=' + client_secret + '&code=' + code
+        
+        access_token = requests.get(url).content.split('&')[0].split('=')[1]
+
         user_info = requests.get('https://api.github.com/user?access_token=%s' % access_token).json()
 
         login_session['access_token'] = access_token
