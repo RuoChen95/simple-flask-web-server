@@ -14,6 +14,7 @@ from flask import make_response
 import requests
 
 from functools import wraps
+from flask_seasurf import SeaSurf #cros
 
 client_id = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -21,6 +22,7 @@ client_secret = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_secret']
 
 app = Flask(__name__)
+csrf = SeaSurf(app)
 
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine

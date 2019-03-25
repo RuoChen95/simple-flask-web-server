@@ -40,9 +40,9 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   1. Create the database using the command:`python database_setup.py`
   2. Use `python setmenus.py` to populate the database
   
-  The database includes two tables:
+  The database includes two tables which can be observed through database_setup.py:
   * The restaurant table includes the name and id.
-  * The menue table includes the name, price, description, restaurant_id.
+  * The menue table includes the name, id, price, description, restaurant_id.
   
 ### Set up
   The web server contains three features:

@@ -20,7 +20,7 @@ class MenuItem(Base):
     description = Column(String(250))
     price = Column(String(8))
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
-    restaurant = relationship(Restaurant) 
+    restaurant = relationship(Restaurant, cascade="all")
 
 # We added this serialize function to be able to send JSON objects in a serializable format
     @property

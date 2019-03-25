@@ -28,7 +28,7 @@ for e in category_json['all_categories']:
   session.add(res)
   session.commit()
   for m in e['menu']:
-    menuItem = MenuItem(name=m['name'], description=m['description'],price=m['price'],restaurant=res)
+    menuItem = MenuItem(name=m['name'], description=m['description'], price=m['price'], restaurant=res)
     session.add(menuItem)
     session.commit()
 
