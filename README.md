@@ -13,6 +13,11 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
  3. execute sql using session
  4. import results into html templates or redirect to another url
 
+## Improvements
+ 1. Implement a decorator function to check user login status
+ 2. Implement the ON DELETE CASCADE
+ 3. Include the csrf_token, flask-seasurf, dealing with the CRUD problem
+
 ## How to run it
 
 ### Setup Project:
@@ -33,7 +38,7 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   ```
   3. Change directory to /vagrant and look around with ls.
   
-### Setting up the database:
+### Setting up the Database:
 
   You can use the restaurantmenu.db directly or using the following command to creat a clean restaurantmenu.db:
 
@@ -45,17 +50,18 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   * The menue table includes the name, id, price, description, restaurant_id.
   
 ### Set up
-  The web server contains three features:
+  The web server contains four features:
 
   1. The CRUD of restaurant table
   2. The CRUD of menu table
   3. Return menu info using JSON
+  4. authentication of github account
 
   run it using 
   ```
     python webserverUsingFlask.py
   ```
 
-## Application code style
+## Application Code Style
 
   Passing the pycodestyle (`pycodestyle --first webserverUsingFlask.py`) checking.
