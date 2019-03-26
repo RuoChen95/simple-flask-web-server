@@ -1,5 +1,13 @@
-from flask import \
-    Flask, render_template, request, redirect, url_for, flash, jsonify, g
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    g
+)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Restaurant, Base, MenuItem
@@ -14,7 +22,7 @@ from flask import make_response
 import requests
 
 from functools import wraps
-from flask_seasurf import SeaSurf #cros
+from flask_seasurf import SeaSurf  # cros
 
 client_id = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
