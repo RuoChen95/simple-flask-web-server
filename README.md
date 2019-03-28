@@ -36,7 +36,7 @@ If running locally, it's a website which has a url: http://0.0.0.0:5000/ showing
   ```
     $ vagrant ssh
   ```
-  3. Change directory to /vagrant and look around with ls.
+  3. Change directory to /vagrant and look around with ls. (*如果出现文件无法同步的情况，尝试使用vagrant reload排查错误*)
   
 ### Setting up the Database:
 
