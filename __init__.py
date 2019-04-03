@@ -8,9 +8,13 @@ from flask import (
     jsonify,
     g
 )
-from sqlalchemy import create_engine
+
 from sqlalchemy.orm import sessionmaker
-from database_setup import Restaurant, Base, MenuItem
+
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
 
 from flask import session as login_session
 
@@ -23,6 +27,43 @@ import requests
 
 from functools import wraps
 # from flask_seasurf import SeaSurf  # cros
+
+
+Base = declarative_base()
+
+
+class Restaurant(Base):
+    __tablename__ = 'restaurant'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+
+
+class MenuItem(Base):
+    __tablename__ = 'menu_item'
+    
+    name = Column(String(80), nullable=False)
+    id = Column(Integer, primary_key=True)
+    description = Column(String(250))
+    price = Column(String(8))
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
+    restaurant = relationship(Restaurant, cascade="all")
+    
+    # We added this serialize function to be able to send JSON objects in a serializable format
+    @property
+    def serialize(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'id': self.id,
+            'price': self.price,
+        }
+
+
+engine = create_engine('sqlite:///restaurantmenu.db')
+
+Base.metadata.create_all(engine)
+
 
 client_id = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
