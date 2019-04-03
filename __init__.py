@@ -28,7 +28,6 @@ import requests
 from functools import wraps
 # from flask_seasurf import SeaSurf  # cros
 
-
 Base = declarative_base()
 
 
@@ -60,20 +59,23 @@ class MenuItem(Base):
         }
 
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+# engine = create_engine('sqlite:///restaurantmenu.db')
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
-
+import os
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+my_file = os.path.join(THIS_FOLDER, 'client_secrets.json')
 client_id = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open(my_file, 'r').read())['web']['client_id']
 client_secret = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_secret']
+    open(my_file, 'r').read())['web']['client_secret']
 
 app = Flask(__name__)
 # csrf = SeaSurf(app)
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+my_file = os.path.join(THIS_FOLDER, 'restaurantmenu.db')
+engine = create_engine('sqlite:///' + my_file)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 
@@ -299,5 +301,4 @@ def delete(res_id, menu_id):
 
 if __name__ == '__main__':
     app.secret_key = 'secure key'
-    app.debug = True
     app.run(host='0.0.0.0', port=5000)
