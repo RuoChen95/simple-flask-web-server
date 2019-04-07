@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, scoped_session
 from sqlalchemy import create_engine
 
 from flask import session as login_session
@@ -77,7 +77,7 @@ app = Flask(__name__)
 my_file = os.path.join(THIS_FOLDER, 'restaurantmenu.db')
 engine = create_engine('sqlite:///' + my_file)
 Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
+DBSession = scoped_session(sessionmaker(bind=engine))
 
 
 def login_required(f):
@@ -168,7 +168,6 @@ def all():
     session = DBSession()
     res = session.query(Restaurant).all()
     menu = session.query(MenuItem)
-    print menu
     return render_template(
         'res.html',
         res=res,
